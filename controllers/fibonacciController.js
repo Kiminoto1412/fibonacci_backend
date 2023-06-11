@@ -2,23 +2,29 @@ exports.nextFibonacci = async (req, res, next) => {
   try {
     const { index } = req.query;
 
-    let result;
-    function fibonacci(index) {
-      if (index < 2) {
-        return index;
+    const findNextFibonacci = (index) => {
+      if (index <= 0) {
+        return 0;
+      } else if (index === 1) {
+        return 1;
       } else {
-        return fibonacci(index - 1) + fibonacci(index - 2);
-      }
-    }
+        let a = 0;
+        let b = 1;
+        let next;
 
-    if (index <= 0) {
-      result = 0;
-    } else {
-      for (let i = 0; i < index; i++) {
-        result = fibonacci(i);
+        for (let i = 2; i <= index; i++) {
+          next = a + b;
+          a = b;
+          b = next;
+        }
+        return next;
       }
-    }
-    res.json({ message: "get next fibonacci successful", result });
+    };
+
+    res.json({
+      message: 'get next fibonacci successful',
+      result: findNextFibonacci(index),
+    });
   } catch (err) {
     next(err);
   }
